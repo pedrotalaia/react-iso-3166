@@ -1,4 +1,4 @@
-# iso2to3
+# React ISO 3166
 
 Tiny ISO 3166-1 alpha-2 ↔ alpha-3 ↔ numeric code converter with smart aliases, powered by the official ISO CSV.
 
@@ -10,12 +10,13 @@ Tiny ISO 3166-1 alpha-2 ↔ alpha-3 ↔ numeric code converter with smart aliase
 
 ## Install
 ```sh
-npm install iso2to3
+npm install react-iso-3166
 ```
 
 ## Usage
+
 ```js
-import { toISO3, toISO2, ISO2_TO_3, ISO2_TO_N3, N3_TO_2 } from 'iso2to3';
+import { toISO3, toISO2, ISO2_TO_3, ISO2_TO_N3, N3_TO_2 } from 'react-iso-3166';
 
 toISO3('pt'); // 'PRT'
 toISO2('FRA'); // 'FR'
