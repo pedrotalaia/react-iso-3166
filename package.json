@@ -24,9 +24,15 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
-    "test": "node --test ./test/*.js",
-    "prepare": "npm run build"
+    "prepublishOnly": "npm run build",
+    "test": "node --test ./test/*.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "src/iso-mapping-3166.csv"
+  ],
   "devDependencies": {
     "tsup": "^8.5.0",
     "typescript": "^5.9.2"
