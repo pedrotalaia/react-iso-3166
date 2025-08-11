@@ -1,4 +1,4 @@
-import { ISO2_TO_3, ISO3_TO_2 } from "./data.js";
+import { ISO2_TO_3, ISO3_TO_2, ISO2_TO_N3, N3_TO_2 } from "./data.js";
 
 /** Normalize ' us ' -> 'US' */
 const norm = s => (s ?? "").trim().toUpperCase();
@@ -26,4 +26,4 @@ export function mustISO2(code) {
 }
 
 // Also export the maps for power users
-export { ISO2_TO_3, ISO3_TO_2 };
+export { ISO2_TO_3, ISO3_TO_2, ISO2_TO_N3, N3_TO_2 };
