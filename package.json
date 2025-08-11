@@ -1,6 +1,6 @@
 {
   "name": "react-iso-3166",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Tiny ISO 3166-1 alpha-2 ↔ alpha-3 converter with smart aliases",
   "license": "MIT",
   "type": "module",
