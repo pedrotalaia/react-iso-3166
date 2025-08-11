@@ -1,0 +1,37 @@
+{
+  "name": "iso2to3",
+  "version": "0.1.0",
+  "description": "Tiny ISO 3166-1 alpha-2 ↔ alpha-3 converter with smart aliases",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "keywords": [
+    "iso-3166",
+    "country-codes",
+    "iso2",
+    "iso3",
+    "alpha-2",
+    "alpha-3"
+  ],
+  "author": "Pedro Talaia",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "test": "node --test ./test/*.js",
+    "prepare": "npm run build"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "csv-parse": "^6.1.0"
+  }
+}
