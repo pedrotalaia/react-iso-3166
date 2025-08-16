@@ -1,6 +1,6 @@
 # React ISO 3166
 
-Tiny ISO 3166-1 alpha-2 ↔ alpha-3 ↔ numeric code converter with smart aliases, powered by the official ISO CSV.
+Tiny ISO 3166-1 alpha-2 ↔ alpha-3 ↔ numeric ↔ dial code converter with smart aliases, powered by the official ISO CSV.
 
 ## Features
 
@@ -11,20 +11,16 @@ npm install react-iso-3166
 
 ## Usage
 
-```js
-
-## Usage
-
 ### Importing
 
 #### ESM (modern Node.js, Vite, etc):
 ```js
-import { toISO3, toISO2, mustISO3, mustISO2, ISO2_TO_3, ISO2_TO_N3, N3_TO_2 } from 'react-iso-3166';
+import { toISO3, toISO2, mustISO3, mustISO2, ISO2_TO_3, ISO2_TO_N3, N3_TO_2, ISO2_TO_DIAL, DIAL_TO_2 } from 'react-iso-3166';
 ```
 
 #### CommonJS (require):
 ```js
-const { toISO3, toISO2, mustISO3, mustISO2, ISO2_TO_3, ISO2_TO_N3, N3_TO_2 } = require('react-iso-3166');
+const { toISO3, toISO2, mustISO3, mustISO2, ISO2_TO_3, ISO2_TO_N3, N3_TO_2, ISO2_TO_DIAL, DIAL_TO_2 } = require('react-iso-3166');
 ```
 
 ### API
@@ -36,19 +32,23 @@ const { toISO3, toISO2, mustISO3, mustISO2, ISO2_TO_3, ISO2_TO_N3, N3_TO_2 } = r
 - `ISO2_TO_3` — Object map: alpha-2 → alpha-3 (e.g., `ISO2_TO_3['FR'] // 'FRA'`).
 - `ISO2_TO_N3` — Object map: alpha-2 → numeric code (string, e.g., `ISO2_TO_N3['FR'] // '250'`).
 - `N3_TO_2` — Object map: numeric code (string) → alpha-2 (e.g., `N3_TO_2['250'] // 'FR'`).
+- `ISO2_TO_DIAL` — Object map: alpha-2 → dial code string (as in CSV, may include hyphens for NANP overlays, e.g., `ISO2_TO_DIAL['BS'] // '1-242'`).
+- `DIAL_TO_2` — Object map: dial code string → alpha-2 (e.g., `DIAL_TO_2['44'] // 'GB'`).
 
 ### Examples
 
 ```js
-import { toISO3, toISO2, mustISO3, mustISO2, ISO2_TO_3, ISO2_TO_N3, N3_TO_2 } from 'react-iso-3166';
+import { toISO3, toISO2, mustISO3, mustISO2, ISO2_TO_3, ISO2_TO_N3, N3_TO_2, ISO2_TO_DIAL, DIAL_TO_2 } from 'react-iso-3166';
 
 import { toISO3, toISO2, ISO2_TO_3, ISO2_TO_N3, N3_TO_2 } from 'react-iso-3166';
 
 toISO3('pt'); // 'PRT'
 toISO2('FRA'); // 'FR'
-ISO2_TO_3['DE'];  // 'DEU'
-ISO2_TO_N3['DE']; // '276'
-N3_TO_2['276'];   // 'DE'
+ISO2_TO_3['DE'];     // 'DEU'
+ISO2_TO_N3['DE'];    // '276'
+N3_TO_2['276'];      // 'DE'
+ISO2_TO_DIAL['GB'];  // '44'
+DIAL_TO_2['1-242'];  // 'BS'
 ```
 
 ### Aliases
@@ -62,9 +62,6 @@ Some common aliases are supported:
 If you want to update the mappings from the official ISO CSV:
 ```sh
 node scripts/generate-from-csv.mjs
-```
-ISO2_TO_N3['FR']; // '250'
-N3_TO_2['250']; // 'FR'
 ```
 
 ## CLI Generation
