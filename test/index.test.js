@@ -1,6 +1,15 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { toISO3, toISO2, mustISO3, mustISO2, ISO2_TO_DIAL, DIAL_TO_2 } from "../src/index.js";
+import {
+    toISO3,
+    toISO2,
+    mustISO3,
+    mustISO2,
+    ISO2_TO_DIAL,
+    DIAL_TO_2,
+    ISO2_TO_3,
+    ISO2_TO_N3
+} from "../src/index.js";
 
 test("maps ISO-2 to ISO-3", (t) => {
     assert.equal(toISO3("us"), "USA");
@@ -31,4 +40,16 @@ test("dial codes mapping", (t) => {
     assert.equal(DIAL_TO_2["1-242"], "BS");
     assert.equal(DIAL_TO_2["44"], "GB");
     t.diagnostic("PASS: dial codes (US->1, GB/UK->44, 1-242->BS, 44->GB)");
+});
+
+test("slice of dataset output", (t) => {
+    const slice = Object.entries(ISO2_TO_3)
+        .slice(0, 5)
+        .map(([a2, a3]) => ({
+            a2,
+            a3,
+            n3: ISO2_TO_N3[a2] || "",
+            dial: ISO2_TO_DIAL[a2] ? `+${ISO2_TO_DIAL[a2]}` : ""
+        }));
+    t.diagnostic(`Slice: ${JSON.stringify(slice, null, 2)}`);
 });
