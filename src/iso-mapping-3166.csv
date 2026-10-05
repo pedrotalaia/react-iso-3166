@@ -167,7 +167,7 @@ Norway,NO,NOR,578,47
 Oman,OM,OMN,512,968
 Pakistan,PK,PAK,586,92
 Palau,PW,PLW,585,680
-Palestine, State of,PS,PSE,970
+"Palestine, State of",PS,PSE,275,970
 Panama,PA,PAN,591,507
 Papua New Guinea,PG,PNG,598,675
 Paraguay,PY,PRY,600,595
@@ -178,13 +178,13 @@ Poland,PL,POL,616,48
 Portugal,PT,PRT,620,351
 Puerto Rico,PR,PRI,630,1-787
 Qatar,QA,QAT,634,974
-Republic of North Macedonia,MK,MKD,807,380
+Republic of North Macedonia,MK,MKD,807,389
 Romania,RO,ROU,642,40
 Russian Federation (the),RU,RUS,643,7
 Rwanda,RW,RWA,646,250
 Réunion,RE,REU,638,262
 Saint Barthélemy,BL,BLM,652,590
-Saint Helena, Ascension and Tristan da Cunha,SH,SHN,290
+"Saint Helena, Ascension and Tristan da Cunha",SH,SHN,654,290
 Saint Kitts and Nevis,KN,KNA,659,1-869
 Saint Lucia,LC,LCA,662,1-758
 Saint Martin (French part),MF,MAF,663,590
@@ -217,7 +217,7 @@ Switzerland,CH,CHE,756,41
 Syrian Arab Republic,SY,SYR,760,963
 Taiwan (Province of China),TW,TWN,158,886
 Tajikistan,TJ,TJK,762,992
-Tanzania, United Republic of,TZ,TZA,255
+"Tanzania, United Republic of",TZ,TZA,834,255
 Thailand,TH,THA,764,66
 Timor-Leste,TL,TLS,626,670
 Togo,TG,TGO,768,228

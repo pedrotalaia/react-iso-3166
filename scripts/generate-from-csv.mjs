@@ -23,16 +23,27 @@ const ISO2_TO_3 = {};
 const ISO2_TO_N3 = {};
 const ISO2_TO_DIAL = {}; // string dial code as-is from CSV (e.g., "1-242", "44", "970")
 
+const badRows = [];
 for (const r of rows) {
     const a2 = r["Alpha-2 code"]?.toUpperCase().trim();
     const a3 = r["Alpha-3 code"]?.toUpperCase().trim();
-    const n = String(r["Numeric"] ?? "").trim().padStart(3, "0");
+    const numRaw = String(r["Numeric"] ?? "").trim();
     const dialRaw = String(r["Dial Codes"] ?? "").trim();
-    if (!a2 || !a3 || !/^\d{1,3}$/.test(String(r["Numeric"]))) continue;
+    // An unquoted comma in a country name shifts the columns; fail loudly instead of dropping the row
+    if (!/^[A-Z]{2}$/.test(a2) || !/^[A-Z]{3}$/.test(a3) || !/^\d{1,3}$/.test(numRaw)) {
+        badRows.push(r);
+        continue;
+    }
 
     ISO2_TO_3[a2] = a3;
-    ISO2_TO_N3[a2] = n;
+    ISO2_TO_N3[a2] = numRaw.padStart(3, "0");
     if (dialRaw) ISO2_TO_DIAL[a2] = dialRaw;
+}
+if (badRows.length) {
+    throw new Error(
+        `Malformed rows in ${path.basename(CSV_PATH)} (quote country names that contain commas):\n` +
+        badRows.map(r => `  ${JSON.stringify(r)}`).join("\n")
+    );
 }
 
 // Aliases (documented behavior)
@@ -49,17 +60,31 @@ if (ISO2_TO_DIAL.GB) ISO2_TO_DIAL.UK = ISO2_TO_DIAL.GB;  // UK alias → same as
 if (ISO2_TO_DIAL.GR) ISO2_TO_DIAL.EL = ISO2_TO_DIAL.GR;  // EL alias → same as GR ("30")
 ISO2_TO_DIAL.XK = ISO2_TO_DIAL.XK || "383";              // Kosovo commonly uses +383
 
-// Reverse maps
-const ISO3_TO_2 = Object.fromEntries(Object.entries(ISO2_TO_3).map(([a2, a3]) => [a3, a2]));
-const N3_TO_2 = Object.fromEntries(Object.entries(ISO2_TO_N3).map(([a2, n]) => [n, a2]));
-// Build reverse dial -> ISO2; then canonicalize alias values to canonical A2
+// Reverse maps skip aliases so they return the canonical A2 (e.g., 'GBR' -> 'GB', not 'UK')
+const ALIASES = new Set(["UK", "EL"]);
+const canonical = ([a2]) => !ALIASES.has(a2);
+
+const ISO3_TO_2 = Object.fromEntries(Object.entries(ISO2_TO_3).filter(canonical).map(([a2, a3]) => [a3, a2]));
+const N3_TO_2 = Object.fromEntries(Object.entries(ISO2_TO_N3).filter(canonical).map(([a2, n]) => [n, a2]));
 const DIAL_TO_2 = Object.fromEntries(
-    Object.entries(ISO2_TO_DIAL).map(([a2, dial]) => [dial, a2])
+    Object.entries(ISO2_TO_DIAL).filter(canonical).map(([a2, dial]) => [dial, a2])
 );
-// Ensure canonical A2 in reverse (e.g., '44' -> 'GB', not 'UK')
-for (const [dial, a2] of Object.entries(DIAL_TO_2)) {
-    if (a2 === "UK") DIAL_TO_2[dial] = "GB";
-    else if (a2 === "EL") DIAL_TO_2[dial] = "GR";
+
+// Some dial codes are shared (e.g., "61": AU, CX, CC). Point them at the main country,
+// matching libphonenumber, rather than whichever row comes last in the CSV.
+const PRIMARY_DIAL_COUNTRY = {
+    "1": "US", "7": "RU", "47": "NO", "61": "AU", "64": "NZ", "212": "MA",
+    "262": "RE", "358": "FI", "500": "FK", "590": "GP", "599": "CW", "672": "NF"
+};
+const dialSharers = {};
+for (const [a2, dial] of Object.entries(ISO2_TO_DIAL).filter(canonical)) (dialSharers[dial] ??= []).push(a2);
+for (const [dial, a2s] of Object.entries(dialSharers)) {
+    if (a2s.length < 2) continue;
+    const primary = PRIMARY_DIAL_COUNTRY[dial];
+    if (!a2s.includes(primary)) {
+        throw new Error(`Dial code ${dial} is shared by ${a2s.join(", ")}; add its main country to PRIMARY_DIAL_COUNTRY`);
+    }
+    DIAL_TO_2[dial] = primary;
 }
 
 // Emit JS module

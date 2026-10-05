@@ -33,7 +33,7 @@ const { toISO3, toISO2, mustISO3, mustISO2, ISO2_TO_3, ISO2_TO_N3, N3_TO_2, ISO2
 - `ISO2_TO_N3` — Object map: alpha-2 → numeric code (string, e.g., `ISO2_TO_N3['FR'] // '250'`).
 - `N3_TO_2` — Object map: numeric code (string) → alpha-2 (e.g., `N3_TO_2['250'] // 'FR'`).
 - `ISO2_TO_DIAL` — Object map: alpha-2 → dial code string (as in CSV, may include hyphens for NANP overlays, e.g., `ISO2_TO_DIAL['BS'] // '1-242'`).
-- `DIAL_TO_2` — Object map: dial code string → alpha-2 (e.g., `DIAL_TO_2['44'] // 'GB'`).
+- `DIAL_TO_2` — Object map: dial code string → alpha-2 (e.g., `DIAL_TO_2['44'] // 'GB'`). Codes shared by several countries map to the main one (e.g., `DIAL_TO_2['61'] // 'AU'`, not Christmas or Cocos Islands).
 
 ### Examples
 
@@ -57,6 +57,8 @@ Some common aliases are supported:
 - `'UK'` → `'GBR'` (United Kingdom)
 - `'EL'` → `'GRC'` (Greece, EU context)
 - `'XK'` → `'XKX'` (Kosovo, user-assigned)
+
+Reverse lookups always return the official code, not the alias (`toISO2('GBR') // 'GB'`, `N3_TO_2['300'] // 'GR'`).
 
 ### Updating the Mappings
 If you want to update the mappings from the official ISO CSV:
